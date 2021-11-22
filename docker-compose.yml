@@ -3,6 +3,16 @@
 version: '3.8'
 
 services:
+    api-gateway:
+        build:
+            context: ./api-gateway
+        image: microservice/demo/api-gateway
+        restart: "no"
+        ports:
+            - 8079:50049
+        depends_on:
+            - user
+
     user:
         build:
             context: ./userService

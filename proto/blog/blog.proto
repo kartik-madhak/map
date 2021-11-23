@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package demo_user;
+
+
+service BlogSvc {
+    rpc createBlog (CreateRequest) returns (Blog);
+    rpc getBlogs (Empty) returns (BlogList);
+    rpc getBlogsByUserId (GetBlogRequest) returns (BlogList);
+    rpc blogExists (GetBlogRequest) returns (GetBlogExistsResponse);
+}
+
+message Empty {
+}
+
+message GetBlogExistsResponse {
+    bool exists = 1;
+}
+
+message CreateRequest {
+    string token = 1;
+    string title = 2;
+    string content = 3;
+}
+
+message Blog{
+    string id = 1;
+    string title = 2;
+    string content = 3;
+    string userId = 4;
+    string createdAt = 5;
+}
+
+message BlogList{
+    repeated Blog blog = 1;
+}
+
+message GetBlogRequest{
+    string id = 1;
+}

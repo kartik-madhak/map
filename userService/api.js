@@ -11,7 +11,7 @@ module.exports = class API {
     }
 
     register = (call, callback) => {
-        const users = this.db.collection("users");
+        const users = this.db.collection(process.env.TABLE_NAME);
 
         bcrypt.hash(call.request.getPassword(), 10, (err, hash) => {
             let user = { name: call.request.getName(), email: call.request.getEmail(), password: hash }
@@ -27,7 +27,7 @@ module.exports = class API {
     }
 
     login = (call, callback) => {
-        const users = this.db.collection("users");
+        const users = this.db.collection(process.env.TABLE_NAME);
 
         users.findOne({ email: call.request.getEmail() }).then(user => {
             if (user) {
@@ -52,7 +52,7 @@ module.exports = class API {
 
     verify = (call, callback) => {
         auth.verify(call.request.getToken(), (usr) => {
-            const users = this.db.collection("users");
+            const users = this.db.collection(process.env.TABLE_NAME);
 
             let resp = new messages.VerifyResponse();
             if (usr) {
@@ -72,7 +72,7 @@ module.exports = class API {
     }
 
     getUser = (call, callback) => {
-        const users = this.db.collection("users");
+        const users = this.db.collection(process.env.TABLE_NAME);
         let resp = new messages.VerifyResponse();
         let userId = ObjectId(call.request.getUserId());
         users.findOne({ _id: userId}).then(user => {

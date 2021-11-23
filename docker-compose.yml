@@ -10,6 +10,8 @@ services:
         restart: "no"
         ports:
             - 8079:50049
+        environment:
+            - USER_ADDRESS=user:50051
         depends_on:
             - user
 
@@ -23,6 +25,19 @@ services:
             - DB_NAME=Microservice-demo-user
         ports:
             - 8080:50051
+        depends_on:
+            - mongo
+
+    blog:
+        build:
+            context: ./blogService
+        image: microservice/demo/blog
+        restart: "no"
+        environment:
+            - DB_URI=mongodb://mongo:27017/
+            - DB_NAME=Microservice-demo-blog
+        ports:
+            - 8081:50052
         depends_on:
             - mongo
 

@@ -13,5 +13,6 @@ setupLogging(app);
 setupProxies(app, ROUTES);
 
 app.listen(port, () => {
+    console.log('USER ADD = ', process.env.USER_ADDRESS)
     console.log(`API-Gateway listening at http://localhost:${port}`)
 })

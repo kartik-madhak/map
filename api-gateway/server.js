@@ -1,18 +1,24 @@
+require('dotenv').config();
 const express = require('express')
-
-const {ROUTES} = require("./routes");
+const cors = require('cors');
 
 const {setupLogging} = require("./logging");
-const {setupProxies} = require("./proxy");
 
 const app = express()
-const port = 50049;
-
-
 setupLogging(app);
-setupProxies(app, ROUTES);
 
-app.listen(port, () => {
-    console.log('USER ADD = ', process.env.USER_ADDRESS)
-    console.log(`API-Gateway listening at http://localhost:${port}`)
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+// setup cors using cors library
+app.use(cors());
+
+app.use('/users', require('./routes/users'))
+app.use('/blogs', require('./routes/blogs'))
+app.use('/comments', require('./routes/comments'))
+app.use('/likes', require('./routes/likes'))
+
+app.listen(process.env.port, () => {
+    console.log(`API-Gateway listening at http://localhost:${process.env.PORT}`)
 })

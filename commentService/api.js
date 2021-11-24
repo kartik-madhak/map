@@ -13,9 +13,10 @@ module.exports = class API {
 
 	createComment = (call, callback) => {
 		// const commentRequest = call.request.;
-
 		const verifyRequest = new userMessages.VerifyRequest();
 		verifyRequest.setToken(call.request.getToken());
+
+		console.log("HERE IS THE CONTENT:", call);
 
 		this.userClient.verify(verifyRequest, (err, response) => {
 			if (err) {
@@ -24,7 +25,6 @@ module.exports = class API {
 
 				let getBlogRequest = new blogMessages.GetBlogRequest();
 				getBlogRequest.setId(call.request.getBlogId());
-
 				this.blogClient.blogExists(getBlogRequest, (err, response2) => {
 
 					if (err) {

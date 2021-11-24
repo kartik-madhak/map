@@ -10,6 +10,18 @@ const likeClient = new likeServices.LikeSvcClient(
 const express = require("express");
 const router = express.Router();
 
+
+const extractLikeList = (likes) => {
+	return likes.map((like) => {
+		return {
+			id: like.getId(),
+			userId: like.getUserId(),
+			blogId: like.getBlogId(),
+			createdAt: like.getCreatedAt(),
+		};
+	});
+};
+
 router.post("/create", (req, res) => {
 
     const createRequest = new likeMessages.CreateRequest();
@@ -20,7 +32,12 @@ router.post("/create", (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.status(200).send(response);
+            res.status(200).send({
+				id: response.getId(),
+				userId: response.getUserId(),
+				blogId: response.getBlogId(),
+				createdAt: response.getCreatedAt(),
+			});
         }
     });
 });
@@ -33,7 +50,8 @@ router.get("/getLikesByBlogId/:id", (req, res) => {
 		if (err) {
 			res.status(500).send(err);
 		} else {
-			res.status(200).send(response);
+
+			res.status(200).send(extractLikeList(response.getLikesList()));
 		}
 	});
 });
@@ -46,7 +64,7 @@ router.get("/getLikesByUserId/:id", (req, res) => {
 		if (err) {
 			res.status(500).send(err);
 		} else {
-			res.status(200).send(response);
+			res.status(200).send(extractLikeList(response.getLikesList()));
 		}
 	});
 });

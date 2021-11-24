@@ -40,6 +40,12 @@ module.exports = class API {
                         resp.setToken(auth.generateToken(user));
                         callback(null, resp);
                     }
+                    else {
+                        return callback({
+                            code: this.grpc.status.UNAUTHENTICATED,
+                            message: "Invalid password",
+                        });
+                    }
                 });
             } else {
                 return callback({

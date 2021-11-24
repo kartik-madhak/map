@@ -10,8 +10,24 @@ const blogClient = new blogServices.BlogSvcClient(
 const express = require("express");
 const router = express.Router();
 
+extractBlogList = (blogList) => {
+    let blogListArray = [];
+
+    for (let i = 0; i < blogList.length; i++) {
+        let blog = blogList[i];
+        blogListArray.push({
+            id: blog.getId(),
+            title: blog.getTitle(),
+            content: blog.getContent(),
+            userId: blog.getUserid(),
+            createdAt: blog.getCreatedat(),
+        });
+    }
+    return blogListArray;
+};
+
 router.post("/create", (req, res) => {
-    let createRequest = new blogMessages.CreateBlogRequest();
+    let createRequest = new blogMessages.CreateRequest();
     createRequest.setTitle(req.body.title);
     createRequest.setContent(req.body.content);
 
@@ -37,7 +53,7 @@ router.get('/', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.status(200).send(response);
+            res.status(200).send(extractBlogList(response.getBlogList()));
         }
     });
 });
@@ -51,7 +67,7 @@ router.get('/:id', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.status(200).send(response);
+            res.status(200).send(extractBlogList(response.getBlogList()));
         }
     });
 });

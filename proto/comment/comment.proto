@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+service CommentSvc {
+    rpc createComment (CreateRequest) returns (Comment);
+    rpc getCommentsByBlogId (GetCommentRequest) returns (CommentList);
+    rpc getCommentsByUserId (GetCommentRequest) returns (CommentList);
+}
+
+message CreateRequest {
+    string blog_id = 1;
+    string token = 2;
+    string content = 3;
+}
+
+message Comment {
+    string id = 1;
+    string blog_id = 2;
+    string user_id = 3;
+    string content = 4;
+    string created_at = 5;
+}
+
+message GetCommentRequest {
+    string id = 1;
+}
+
+message CommentList {
+    repeated Comment comments = 1;
+}

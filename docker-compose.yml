@@ -1,0 +1,106 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+    api-gateway:
+        build:
+            context: ./api-gateway
+        image: microservice/demo/api-gateway
+        restart: "no"
+        environment:
+            - USER_ADDR=user:50051
+            - BLOG_ADDR=blog:50052
+            - COMMENT_ADDR=comment:50053
+            - LIKE_ADDR=like:50054
+            - DB_URI=mongodb://mongo:27017/
+        ports:
+            - 8079:50049
+        depends_on:
+            - user
+
+    user:
+        build:
+            context: ./userService
+        image: microservice/demo/user
+        restart: "no"
+        environment:
+            - USER_ADDR=user:50051
+            - BLOG_ADDR=blog:50052
+            - COMMENT_ADDR=comment:50053
+            - LIKE_ADDR=like:50054
+            - DB_URI=mongodb://mongo:27017/
+        ports:
+            - 8080:50051
+        depends_on:
+            - mongo
+
+    blog:
+        build:
+            context: ./blogService
+        image: microservice/demo/blog
+        restart: "no"
+        environment:
+            - USER_ADDR=user:50051
+            - BLOG_ADDR=blog:50052
+            - COMMENT_ADDR=comment:50053
+            - LIKE_ADDR=like:50054
+            - DB_URI=mongodb://mongo:27017/
+        ports:
+            - 8081:50052
+        depends_on:
+            - mongo
+            - user
+
+    comment:
+        build:
+            context: ./commentService
+        image: microservice/demo/comment
+        restart: "no"
+        environment:
+            - USER_ADDR=user:50051
+            - BLOG_ADDR=blog:50052
+            - COMMENT_ADDR=comment:50053
+            - LIKE_ADDR=like:50054
+            - DB_URI=mongodb://mongo:27017/
+        ports:
+            - 8082:50053
+        depends_on:
+            - mongo
+            - user
+            - blog
+
+    like:
+        build:
+            context: ./likeService
+        image: microservice/demo/like
+        restart: "no"
+        environment:
+            - USER_ADDR=user:50051
+            - BLOG_ADDR=blog:50052
+            - COMMENT_ADDR=comment:50053
+            - LIKE_ADDR=like:50054
+            - DB_URI=mongodb://mongo:27017/
+        ports:
+            - 8083:50054
+        depends_on:
+            - mongo
+            - user
+            - blog
+
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_DATABASE: microserviceTry
+        ports:
+            - 27017:27017
+        volumes:
+            - mongodb:/data/db
+            - mongodb_config:/data/configdb
+
+volumes:
+    postgresdb:
+    mysqldb:
+    mongodb:
+    mongodb_config:

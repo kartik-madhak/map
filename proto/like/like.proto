@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service LikeSvc {
+    rpc createLike (CreateRequest) returns (Like);
+    rpc getLikesByBlogId (GetLikeRequest) returns (LikeList);
+    rpc getLikesByUserId (GetLikeRequest) returns (LikeList);
+}
+
+message CreateRequest {
+    string blog_id = 1;
+    string token = 2;
+}
+
+message Like {
+    string id = 1;
+    string blog_id = 2;
+    string user_id = 3;
+    string created_at = 5;
+}
+
+message GetLikeRequest {
+    string id = 1;
+}
+
+message LikeList {
+    repeated Like likes = 1;
+}

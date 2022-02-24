@@ -3,10 +3,10 @@
 version: '3.8'
 
 services:
-    gateway:
+    api-gateway:
         build:
             context: ./api-gateway
-        image: microservice/demo/gateway
+        image: microservice/demo/api-gateway
         restart: "no"
         environment:
             - USER_ADDR=user:50051
@@ -15,22 +15,9 @@ services:
             - LIKE_ADDR=like:50054
             - DB_URI=mongodb://mongo:27017/
         ports:
-            - "8079:50049"
+            - 8079:50049
         depends_on:
             - user
-
-    frontend:
-        build: 
-            context: ./frontend
-        image: microservice/demo/frontend
-        restart: "no"
-        environment:
-            - REACT_APP_API_URL=${gateway}:50049
-        ports:
-            - "3000:3000"
-        depends_on:
-            - user
-            - gateway
 
     user:
         build:
@@ -44,7 +31,7 @@ services:
             - LIKE_ADDR=like:50054
             - DB_URI=mongodb://mongo:27017/
         ports:
-            - "8080:50051"
+            - 8080:50051
         depends_on:
             - mongo
 
@@ -60,7 +47,7 @@ services:
             - LIKE_ADDR=like:50054
             - DB_URI=mongodb://mongo:27017/
         ports:
-            - "8081:50052"
+            - 8081:50052
         depends_on:
             - mongo
             - user
@@ -77,7 +64,7 @@ services:
             - LIKE_ADDR=like:50054
             - DB_URI=mongodb://mongo:27017/
         ports:
-            - "8082:50053"
+            - 8082:50053
         depends_on:
             - mongo
             - user
@@ -95,7 +82,7 @@ services:
             - LIKE_ADDR=like:50054
             - DB_URI=mongodb://mongo:27017/
         ports:
-            - "8083:50054"
+            - 8083:50054
         depends_on:
             - mongo
             - user
@@ -107,7 +94,7 @@ services:
         environment:
             MONGO_INITDB_DATABASE: microserviceTry
         ports:
-            - "27017:27017"
+            - 27017:27017
         volumes:
             - mongodb:/data/db
             - mongodb_config:/data/configdb
